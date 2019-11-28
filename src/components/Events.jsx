@@ -26,9 +26,11 @@ export default class Events extends Component {
         //if we get multiple objects, can just put them in an array
         console.log(response.data);
         const updatedData = response.data.filter(event => {
-          console.log(this.props.arriveDate);
-          console.log(this.props.departDate);
-          return event.startTime.includes(this.props.arriveDate || this.props.departDate);
+          const eventStart = new Date(event.startTime);
+          const arriveDate = new Date(this.props.arriveDate);
+          const departDate = new Date(this.props.departDate);
+          // return event.startTime.includes(this.props.arriveDate || this.props.departDate);
+          return eventStart > arriveDate && eventStart < departDate;
         });
 
         this.setState({ events: updatedData, loading: false });
@@ -44,8 +46,6 @@ export default class Events extends Component {
       newPrevIndex--;
       this.setState({ eventIndex: newPrevIndex });
     }
-
-    console.log("ok");
   };
 
   checkNextEvent = () => {
@@ -54,7 +54,6 @@ export default class Events extends Component {
     if (this.state.eventIndex !== this.state.events.length - 1) {
       this.setState({ eventIndex: newNextIndex });
     }
-    console.log("ok");
   };
 
   render() {

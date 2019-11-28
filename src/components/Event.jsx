@@ -9,7 +9,6 @@ export default class Event extends Component {
     if (startTime.includes("00:00:00")) {
       startTime = startTime.replace("00:00:00", "TBD");
     }
-    console.log(startTime, "hello");
     return (
       <div id="singleEventContainer">
         <div id="title">{this.props.title}</div>
