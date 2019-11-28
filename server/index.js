@@ -3,6 +3,7 @@ const path = require("path");
 const app = express();
 const { loadHotels, loadCities } = require("./utils/Hotels/index.js");
 const { getEvents } = require("./utils/Events/getEvents");
+const { checkEventCache, setEventCache } = require("./utils/cache/cache.js");
 
 app.use("/api", express.json(), express.urlencoded({ extended: true }));
 
@@ -30,7 +31,15 @@ app.post("/api/hotels", async (req, res) => {
 
 app.post("/api/events", async (req, res) => {
   try {
-    const events = await getEvents(req.body.city, req.body.date);
+    let events;
+    const cachedEvents = await checkEventCache(req.body.city, req.body.date);
+    if (cachedEvents === "") {
+      console.info("Pulling new Event Info");
+      events = await getEvents(req.body.city, req.body.date);
+      setEventCache(req.body.city, req.body.date, events);
+    } else {
+      events = JSON.parse(cachedEvents);
+    }
     res.json(events);
   } catch (e) {
     throw new Error("event error");

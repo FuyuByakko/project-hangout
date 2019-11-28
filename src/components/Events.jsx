@@ -26,12 +26,12 @@ export default class Events extends Component {
         //if we get multiple objects, can just put them in an array
         console.log(response.data);
         const updatedData = response.data.filter(event => {
+          console.log(this.props.arriveDate);
+          console.log(this.props.departDate);
           return event.startTime.includes(this.props.arriveDate || this.props.departDate);
         });
 
-        this.setState({ events: updatedData });
-        this.setState({ loading: false });
-        //console.log(response.data)
+        this.setState({ events: updatedData, loading: false });
       })
       .catch(function(error) {
         console.log(error);
