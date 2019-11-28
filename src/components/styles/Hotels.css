@@ -16,6 +16,10 @@
     width: 60%;
 }
 
+.loading {
+    align-self: center;
+}
+
 .hotels {
     background: black;
     opacity: 0.75;

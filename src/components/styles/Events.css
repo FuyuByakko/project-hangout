@@ -18,6 +18,10 @@
     transition: all 0.25s;
 }
 
+.loading {
+    align-self: center;
+}
+
 .events {
     width:90%;
     height:100%;

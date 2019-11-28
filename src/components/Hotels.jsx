@@ -9,6 +9,7 @@ export default class Hotels extends Component {
     this.state = {
       hotels: [],
       currentHotel: 0,
+      loading: true,
     };
   }
 
@@ -28,7 +29,7 @@ export default class Hotels extends Component {
       })
       .then(list => {
         console.log(list);
-        this.setState({ hotels: list.data ? list.data.filter(x => x !== null) : [] }, function() {
+        this.setState({ hotels: list.data ? list.data.filter(x => x !== null) : [], loading: false }, function() {
           console.log(this.state);
         });
       })
@@ -55,6 +56,13 @@ export default class Hotels extends Component {
     } else {
       this.setState({ currentHotel: newHotel });
     }
+  };
+
+  nothingFound = () => {
+    if (!this.state.loading && this.state.hotels.length < 1) {
+      return <h1 className="loading"> Sorry, no hotels found...</h1>;
+    }
+    return;
   };
 
   render() {
@@ -87,7 +95,12 @@ export default class Hotels extends Component {
         </div>
         <div className="selectedHotel">
           <center type="text" className="hotelInfo">
-            {hotels[this.state.currentHotel]}
+            {this.state.loading ? (
+              <img className="loading" src="https://media1.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif" />
+            ) : (
+              hotels[this.state.currentHotel]
+            )}
+            {this.nothingFound()}
           </center>
         </div>
         <div className="rightArrow">

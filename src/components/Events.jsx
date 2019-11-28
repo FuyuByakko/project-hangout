@@ -56,10 +56,14 @@ export default class Events extends Component {
     }
   };
 
+  nothingFound = () => {
+    if (!this.state.loading && this.state.events.length < 1) {
+      return <h1 className="loading"> Sorry, no events found...</h1>;
+    }
+    return;
+  };
+
   render() {
-    // if(this.state.loading === true) {
-    //    // <img src="https://media1.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif"/>
-    // }
     const events = this.state.events.map((event, index) => {
       return (
         <Event
@@ -79,7 +83,14 @@ export default class Events extends Component {
         <div className="leftArrow" onClick={this.checkPreviousEvent}>
           <img className="arrowImage" src="https://img.icons8.com/flat_round/64/000000/arrow-left.png" />
         </div>
-        <div className="events">{events[this.state.eventIndex]}</div>
+        <div className="events">
+          {this.state.loading ? (
+            <img className="loading" src="https://media1.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif" />
+          ) : (
+            events[this.state.eventIndex]
+          )}
+          {this.nothingFound()}
+        </div>
         <div className="rightArrow" onClick={this.checkNextEvent}>
           <img className="arrowImage" src="https://img.icons8.com/flat_round/64/000000/arrow-right.png" />
         </div>
