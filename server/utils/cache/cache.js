@@ -13,4 +13,16 @@ function setEventCache(cityName, dates, events) {
   return axios.post(`${CACHE_LINK}${key}`, events);
 }
 
-module.exports = { checkEventCache, setEventCache };
+function checkHotelCache(info) {
+  const key = `${info.city}-${info.arrivalDate}-${info.departureDate}-${info.minPrice}-${info.maxPrice}`;
+  console.log(key);
+  const cachedEvent = axios.get(`${CACHE_LINK}${key}`);
+  return cachedEvent.then(resp => resp.data);
+}
+
+function setHotelCache(info, hotels) {
+  const key = `${info.city}-${info.arrivalDate}-${info.departureDate}-${info.minPrice}-${info.maxPrice}`;
+  return axios.post(`${CACHE_LINK}${key}`, hotels);
+}
+
+module.exports = { checkEventCache, setEventCache, checkHotelCache, setHotelCache };

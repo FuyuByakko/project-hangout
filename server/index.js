@@ -3,7 +3,7 @@ const path = require("path");
 const app = express();
 const { loadHotels, loadCities } = require("./utils/Hotels/index.js");
 const { getEvents } = require("./utils/Events/getEvents");
-const { checkEventCache, setEventCache } = require("./utils/cache/cache.js");
+const { checkEventCache, setEventCache, checkHotelCache, setHotelCache } = require("./utils/cache/cache.js");
 
 app.use("/api", express.json(), express.urlencoded({ extended: true }));
 
@@ -22,7 +22,16 @@ app.post("/api/city", async (req, res) => {
 app.post("/api/hotels", async (req, res) => {
   try {
     const cityInfo = req.body;
-    const hotels = await loadHotels(cityInfo);
+    let hotels;
+    const cachedHotels = await checkHotelCache(cityInfo);
+    if (cachedHotels === "") {
+      console.info("Pulling new Hotel Info");
+      hotels = await loadHotels(cityInfo);
+      console.log(hotels);
+      setHotelCache(cityInfo, hotels);
+    } else {
+      hotels = JSON.parse(cachedHotels);
+    }
     res.json(hotels);
   } catch (e) {
     res.json([]);
